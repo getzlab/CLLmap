@@ -1,0 +1,18 @@
+{
+  "IGH" : {
+      "region" : "14:106052774-107288051",
+      "matelink" : true
+       },
+  "IGL" : {
+       "region" : "22:22380000-23264000",
+       "matelink" : true
+    },
+    "IGK" : {
+        "region" : "2:89131589-90274600",
+        "matelink" : true
+    },
+    "unmapped" : {
+        "mapped" : false,
+        "matelink" : true
+    }
+}

@@ -1,0 +1,172 @@
+# Terra workflows used in the CLL-map project
+### The CLL-map project: Assembly and analysis of genetic, transcriptomic, epigenetic and clinical data from over 1100 CLL patients
+### Citation: Knisbacher, Lin, Hahn, Nadeu, Duran-Ferrer et al., Nature Genetics, 2022
+
+#### CLL-map Data Portal: https://data.broadinstitute.org/cllmap/
+
+#### CLL-map GitHub repository: https://github.com/getzlab/CLLmap
+
+For questions, please contact:  bknisbac@broadinstitute.org (Binyamin Knisbacher)
+
+### **IMPORTANT NOTES:**
+#### 1. Workspace description:
+This Terra workflow-only workspace is primarily intended for review and educational purposes.
+It is a snapshot in time of the workflows and individual tools as used for the CLLmap project, but many tools have been evolving.
+We, therefore, recommend that users refer to the source GitHub repositories to find the most updated
+versions of the tools and search https://portal.firecloud.org/?return=terra#methods for updated Terra workflows.
+
+#### 2. Credit and citation:
+Most Terra workflows are wrappers of existing software. Therefore, if you use these workflows, **please cite the respective tools** that the workflow runs.
+We provide references to GitHub repos and publications to aid in doing so.
+
+**If this repo enabled or accelerated your research, please **also** cite the CLL-map (Knisbacher et al, Nature Genetics, 2022)**
+
+#### 3. Code license:
+
+Please refer to GitHub repos per tool for license, or contact authors. Most Terra workflows are under BSD-3 license (Broad Institute). See the LICENSE.txt file in Workspace Attributes.
+
+See at bottom of this page the source workflows from which workflows here were derived. This has implications for credit and licensing.
+
+# WORKFLOWS
+
+## Whole-exome sequencing processing and mutation calling
+**Workflow: Realign_hg38_bam_to_hg19_bam_WES** -  Realignment workflow to lift up/down a genome version.
+
+**Workflow: WES_pipeline_fastq_bwamem_bqsr_coclean_MarkDuplicates** - Whole exome sequencing (WES) alignment pipeline (from FASTQ to BAM) using the BWAMEM algorithm, together with co-clean and mark duplicates tasks.
+
+**Workflow: CGA_WES_Characterization_Pipeline_v0.2_Jun2019_fix_detin_bug_add_strelka2_indels_for_detin** - Somatic short variant detection using matched tumor and normal WES BAMs. Applies QC and various characterization tools.
+For details and a comprehensive user manual, see the official Broad Cancer Genome Analysis WES pipeline Firecloud/Terra Method: https://portal.firecloud.org/?return=terra#methods/getzlab/CGA_WES_Characterization_Pipeline_v0.2_Jun2019/5
+
+**Workflow: Mutect1_ForceCall_extract** - A variant discovery tool, currently used for somatic SNV discovery and outputs all alternative alleles (cite: Cibulskis et al, Nature, 2013).
+
+## Downstream analyses of genetic alterations
+**Workflow: mutation_mutsig2cv_hg19** - Somatic driver gene detection with MutSig2CV (cite: Lawrence, Nature, 2014). https://github.com/getzlab/MutSig2CV
+
+**Workflow: CopyNumber_Gistic2_hg19** - Somatic copy number alteration driver detection with GISTIC 2.0 (cite: Mermel, Genome Biology, 2011).
+
+**Note: CLUMPS for driver detection using 3D protein structures was not run in Terra. Find it here: https://github.com/getzlab/CLUMPS
+
+**Workflow: PhylogicNDT** - Tumor evolutionary trajectory inference (cite: Gruber, Nature, 2019). https://github.com/broadinstitute/PhylogicNDT
+
+**Workflow: Mutation_Signature_Analyzer_Config** - Mutational signature analysis (cite: Kim, Nature Genetics, 2016; Kasar, Nature communications, 2015). https://github.com/broadinstitute/SignatureAnalyzer-GPU
+
+## Whole-genome sequencing processing
+Pipeline is essentially identical to WES pipeline.
+The most updated WGS pipeline developed in the Getz lab can be viewed here: https://github.com/getzlab/hg19_WGS_pipeline_wolF
+
+## Structural variants pipeline
+
+SV pipeline developed by Chip Stewart, Broad Institute.
+
+For pipeline details, see supplementary material of Morton et al, Science, 2021 at https://www.science.org/doi/10.1126/science.abg2538
+Morton et al should be cited if you use this SV pipeline.
+
+Official methods for this SV pipeline were released in: https://app.terra.bio/#workspaces/rebc-oct16/REBC_methods_only
+
+### Step 1 - SV tools
+**Workflow: dRanger_pipette_WGS** - dRanger SV detection method (cite one or all: Chapman, Nature, 2011; Berger, Nature, 2011; Bass, Nat Genet, 2011)
+
+**Workflow: manta** - Manta SV detection method (cite: Chen, Bioinformatics, 2016)
+
+**Workflow: SvABA_xtramem** - SvABA SV detection method (cite: Wala, Genome Res, 2018)
+
+### Step 2 - SV method format harmonization
+**Workflow: extract_dRanger_intermediates** - reformat dRanger output
+
+**Workflow: mantavcf2dRangerForBP** - reformat Manta output
+
+**Workflow: svaba_snowmanvcf2dRangerForBP** - reformat SvABA output
+
+### Step 3 - SV tool result integration and post-filtering
+**Workflow: SV_cluster_forBP** - cluster SV calls before Breakpointer
+
+**Workflow: breakpointer** - Run breakpointer on aggregate results
+
+**Workflow: Breakpointer_fix_sample** -Breakpointer fix sample
+
+**Workflow: SV_consensus_filter** - Filter based on tool agreement on SV calls
+
+## B-cell receptor characterization
+**Workflow: mixcr_bam_flexible** - MIXCR method for BCR characterization (cite: Bolotin, Nature Methods, 2015; Bolotin, Nature Biotech, 2017)
+
+For details: https://github.com/milaboratory/mixcr
+
+**Workflow: IgCaller** - IgCaller method for BCR characterization. Includes IGHV sequence assembly used in IMGT/VQUEST to determine IGHV mutation status (cite: Nadeu, Nat Comm, 2021; Knisbacher, Nat Genet, 2022)
+
+For details: https://github.com/ferrannadeu/IgCaller
+
+## RNA-seq processing (GTEx pipeline)
+For details: https://github.com/broadinstitute/gtex-pipeline
+
+**Workflow: samtofastq_v1-0_BETA_cfg** - Preprocessing - convert BAM to fastq before re-alignment with STAR
+
+**Workflow: star_v1-0_BETA_cfg** - RNA alignment using STAR (cite: Dobin, Bioinformatics, 2013)
+
+**Workflow: markduplicates_v1-0_BETA_cfg** - Mark duplicate reads in the aligned BAM (used in RNA-SeQC)
+
+**Workflow: rnaseqc2_v1-0_BETA_cfg** - Quality Control for aligned RNA-seq BAMs. (cite: Graubert, Bioinformatics, 2021)
+
+Counts and TPMs generated by RNA-SeQC were used for gene expression analyses in the CLL-map project.
+
+## Methylation (RRBS processing)
+
+Three workflows were used for the RRBS (Reduced-representation bisulfite sequencing) data, based on the sequencing protocol and consequential trimming required.
+
+For details: https://github.com/getzlab/RRBS_tools (specifically the BSMAP and Docker directories).
+
+We thank Helene Kretzmer and Sven Klages (Max Planck Institute for Molecular Genetics) for contributing code used at the core of this pipeline.
+
+cite: Knisbacher, Nature Genetics, 2022 (CLLmap); Xi, BMC bioinformatics, 2009 (BSMAP), Sun, Genome Biology, 2014 (mcall module of MOABS)
+
+Each workflow includes:
+
+(1) FASTQC for FASTQ quality control
+
+(2) FASTQ trimming
+
+(3) extracting BAM statistics
+
+(4) alignment with BSMAP
+
+(5) MarkDuplicates
+
+(6) MCALL for methylation calling
+
+(7) MULTIQC for BAM QC
+
+**Workflow: bsmap_mcall_SE_uniq** - Single-end RRBS processing workflow
+
+**Workflow: bsmap_mcall_PE_trim5p2R2** - Paired-end RRBS processing workflow for samples that needed 2 bases trimmed at 5' of Read2
+
+**Workflow: bsmap_mcall_PE_trimRRBS_trim5p6R1_trim5p6R2** - Paired-end RRBS processing workflow for samples that needed 6 bases trimmed at 5' of Read1 and Read2
+
+## Multiomic workflows
+
+**Workflow: CrossCheckLaneFingerprints_WESvsRNA** - CrossCheckFingerprint to rule out sample swaps in multiomic data (cite: Javed, Nature comm, 2020). The example here is for WES vs RNA-seq.
+
+https://gatk.broadinstitute.org/hc/en-us/articles/360037594711-CrosscheckFingerprints-Picard
+
+**Workflow: mutation_validator** - uses multiple data types to confirm presence of a pre-defined set of mutations. Applied in CLL-map to assist in manual review of driver mutation calls
+
+https://github.com/chipstewart/MutationValidator
+
+# SOURCE WORKFLOWS
+The following list maps CLLmap workflows to the original 'source' workflow from which they were derived (refer to source method for license and credit):
+
+**Source namespace/workflow -> CLLmap workflow**
+
+GPTAG/BamRealigner -> Realign_hg38_bam_to_hg19_bam_WES
+
+WES-Utils/WES_pipeline_fastq_bwamem_bqsr_coclean_MarkDuplicates -> WES_pipeline_fastq_bwamem_bqsr_coclean_MarkDuplicates
+
+getzlab/CGA_WES_Characterization_Pipeline_v0.2_Jun2019 -> CGA_WES_Characterization_Pipeline_v0.2_Jun2019_fix_detin_bug_add_strelka2_indels_for_detin
+
+getzlab/Mutect1 -> Mutect1_ForceCall_extract
+
+broadgdac/mutation_mutsig2cv -> mutation_mutsig2cv_hg19
+
+broadgdac/copy_number_gistic2 -> CopyNumber_Gistic2_hg19
+
+jcha/PhylogicNDT -> PhylogicNDT
+
+broadgdac/mutation_signature_analyzer -> Mutation_Signature_Analyzer_Config
