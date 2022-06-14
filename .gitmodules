@@ -1,0 +1,12 @@
+[submodule "methylation/CLLmap-epigenetics"]
+	path = methylation/CLLmap-epigenetics
+	url = https://github.com/Duran-FerrerM/CLLmap-epigenetics
+[submodule "methylation/RRBS_tools"]
+	path = methylation/RRBS_tools
+	url = https://github.com/getzlab/RRBS_tools
+[submodule "copy_number/GISTIC2_postprocessing"]
+	path = copy_number/GISTIC2_postprocessing
+	url = https://github.com/getzlab/GISTIC2_postprocessing
+[submodule "structural_variation/REBC_tools"]
+	path = structural_variation/REBC_tools
+	url = https://github.com/getzlab/REBC_tools
